@@ -1,6 +1,7 @@
 import { statusList } from "../../data";
 import Column from "../Column/Column";
 
+
 const Main = ({ cards }) => {
   return (
     <main className="main">
