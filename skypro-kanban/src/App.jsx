@@ -1,8 +1,8 @@
 // import { useState } from "react";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
-import "./App.css";
-import Header from "./components/Header/Header";
+
+// import "./App.css";
 import Main from "./components/Main/Main";
 import PopNewCard from "./components/Popups/PopNewCard";
 import PopUser from "./components/Popups/PopUser";
@@ -10,6 +10,8 @@ import PopBrowse from "./components/Popups/PopBrowse";
 import Loader from "./components/Loader/Loader";
 import { cardsList, topicList } from "./data";
 import { useEffect, useState } from "react";
+import { GlobalStyle, StyledWrapper } from "./Global.styled";
+import Header from "./components/Header/Header";
 
 function App() {
   const [cards, setCards] = useState(cardsList);
@@ -38,15 +40,15 @@ function App() {
 
   return (
     <>
-      <div className="wrapper">
+      <GlobalStyle />
+      <StyledWrapper>
         <PopUser />
         <PopNewCard />
         <PopBrowse />
 
         <Header addCard={addCard} />
         {dataLoading ? <Loader /> : <Main cards={cards} />}
-        {/* <Main cards={cards} /> */}
-      </div>
+      </StyledWrapper>
     </>
   );
 }

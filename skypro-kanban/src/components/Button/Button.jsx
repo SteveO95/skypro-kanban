@@ -1,8 +1,10 @@
-const Button = ({ link, text, id, className, onClick }) => {
+import { StyledButton } from "./Button.styled";
+
+const Button = ({ link, text, id, className, onClick, ...props }) => {
   return (
-    <button id={id || ""} className={className || ""} onClick={onClick}>
+    <StyledButton id={id || ""} className={className || ""} onClick={onClick}>
       <a href={link || "#"}>{text}</a>
-    </button>
+    </StyledButton>
   );
 };
 

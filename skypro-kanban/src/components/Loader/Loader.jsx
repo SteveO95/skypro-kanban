@@ -1,13 +1,17 @@
+import { StyledMain } from "../Main/Main.styled";
+import { StyledContainer } from "../Container/Container.styled";
+import { StyledLoaderContainer, StyledLoader } from "./Loader.styled";
+
 const Loader = () => {
   return (
-    <main className="main">
-      <div className="container">
-        <div className="custom-loader-container">
-          <div className="custom-loader"></div>
+    <StyledMain>
+      <StyledContainer>
+        <StyledLoaderContainer>
+          <StyledLoader />
           <h1>Данные загружаются...</h1>
-        </div>
-      </div>
-    </main>
+        </StyledLoaderContainer>
+      </StyledContainer>
+    </StyledMain>
   );
 };
 

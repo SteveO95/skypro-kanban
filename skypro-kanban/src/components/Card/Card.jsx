@@ -1,24 +1,38 @@
+import {
+  StyledCardItem,
+  StyledCard,
+  StyledCardGroup,
+  StyledCardContent,
+  StyledCardButton,
+  StyledCardTheme,
+  StyledCardTitle,
+  StyledCardDate,
+} from "./Card.styled";
+import { topicCompare } from "../../data";
+
 const Card = ({ id, topic, title, date }) => {
+  const color = topicCompare[topic];
+
   return (
-    <div className="cards__item" data-id={id}>
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className="card__theme _orange">
-            <p className="_orange">{topic}</p>
-          </div>
+    <StyledCardItem className="cards__item" data-id={id}>
+      <StyledCard>
+        <StyledCardGroup>
+          <StyledCardTheme $color={color}>
+            <p>{topic}</p>
+          </StyledCardTheme>
           <a href="#popBrowse" target="_self">
-            <div className="card__btn">
-              {/* <div></div>
+            <StyledCardButton>
               <div></div>
-              <div></div> */}
-            </div>
+              <div></div>
+              <div></div>
+            </StyledCardButton>
           </a>
-        </div>
-        <div className="card__content">
+        </StyledCardGroup>
+        <StyledCardContent className="card__content">
           <a href="" target="_blank">
-            <h3 className="card__title">{title}</h3>
+            <StyledCardTitle>{title}</StyledCardTitle>
           </a>
-          <div className="card__date">
+          <StyledCardDate>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <g clipPath="url(#clip0_1_415)">
                 <path
@@ -42,10 +56,10 @@ const Card = ({ id, topic, title, date }) => {
               </defs>
             </svg>
             <p>{date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+          </StyledCardDate>
+        </StyledCardContent>
+      </StyledCard>
+    </StyledCardItem>
   );
 };
 
