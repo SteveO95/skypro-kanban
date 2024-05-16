@@ -9,12 +9,14 @@ import {
   StyledCardDate,
 } from "./Card.styled";
 import { topicCompare } from "../../data";
+import { Link } from "react-router-dom";
+import { AppRoutesList } from "../../AppRoutesList";
 
 const Card = ({ id, topic, title, date }) => {
   const color = topicCompare[topic];
 
   return (
-    <StyledCardItem className="cards__item" data-id={id}>
+    <StyledCardItem data-id={id}>
       <StyledCard>
         <StyledCardGroup>
           <StyledCardTheme $color={color}>
@@ -28,10 +30,10 @@ const Card = ({ id, topic, title, date }) => {
             </StyledCardButton>
           </a>
         </StyledCardGroup>
-        <StyledCardContent className="card__content">
-          <a href="" target="_blank">
+        <StyledCardContent>
+          <Link to={`${AppRoutesList.Card}/${id}`}>
             <StyledCardTitle>{title}</StyledCardTitle>
-          </a>
+          </Link>
           <StyledCardDate>
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
               <g clipPath="url(#clip0_1_415)">
