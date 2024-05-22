@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   StyledHeader,
   StyledHeaderBlock,
@@ -13,6 +13,7 @@ import {
 } from "./Header.styled.js";
 import { StyledContainer } from "../Container/Container.styled.js";
 import { StyledButton } from "../Button/Button.styled.js";
+import { Link } from "react-router-dom";
 
 const Header = ({ addCard }) => {
   const [displayUserCard, setDisplayUserCard] = useState(false);
@@ -32,14 +33,7 @@ const Header = ({ addCard }) => {
             </a>
           </StyledHeaderLogo>
           <StyledNav>
-            <StyledAddTaskButton
-              // link="#popNewCard"
-              onClick={addCard}
-              text="Создать новую задачу"
-              id="btnMainNew"
-              $width={"178px"}
-            />
-
+            <StyledAddTaskButton onClick={addCard} text="Создать новую задачу" id="btnMainNew" $width={"178px"} />
             <StyledHeaderUser onClick={toggleUserCard}>Ivan Ivanov</StyledHeaderUser>
             {displayUserCard ? (
               <StyledPopUpUser id="user-set-target">
@@ -50,9 +44,11 @@ const Header = ({ addCard }) => {
                   <p>Темная тема</p>
                   <input type="checkbox" className="checkbox" name="checkbox" />
                 </StyledHeaderTheme>
-                <StyledButton $inverted $width={"72px"}>
-                  Выйти
-                </StyledButton>
+                <Link to={"/exit"}>
+                  <StyledButton $inverted $width={"72px"}>
+                    Выйти
+                  </StyledButton>
+                </Link>
               </StyledPopUpUser>
             ) : (
               ""
