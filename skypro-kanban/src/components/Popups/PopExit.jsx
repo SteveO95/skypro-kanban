@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import Button from "../Button/Button";
 import { StyledPopUp, StyledPopUpExitFormGroup } from "./PopUp.styled";
+import { AppRoutesList } from "../../AppRoutesList";
+import { useNavigate } from "react-router-dom";
 
-const PopExit = ({ logout }) => {
+const PopExit = ({ setUser }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(null);
+    navigate(AppRoutesList.Login);
+  };
+
   return (
     <StyledPopUp>
       <StyledPopUp className="pop-exit" id="popExit">
@@ -13,7 +22,7 @@ const PopExit = ({ logout }) => {
             </div>
             <form id="formExit">
               <StyledPopUpExitFormGroup>
-                <Button $width={"119px"} text={"Да, выйти"} onClick={logout}></Button>
+                <Button $width={"119px"} text={"Да, выйти"} onClick={handleLogout}></Button>
                 <Link to={"/"}>
                   <Button $inverted $width={"119px"} text={"Нет, остаться"}></Button>
                 </Link>

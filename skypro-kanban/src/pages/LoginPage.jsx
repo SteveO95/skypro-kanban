@@ -1,7 +1,7 @@
 import StandaloneLogin from "../components/Standalones/StandaloneLogin";
 
-const LoginPage = ({ authUser }) => {
-  return <StandaloneLogin authUser={authUser} />;
+const LoginPage = ({ setUser }) => {
+  return <StandaloneLogin setUser={setUser} />;
 };
 
 export default LoginPage;

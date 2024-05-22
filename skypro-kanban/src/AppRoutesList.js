@@ -1,7 +1,7 @@
 export const AppRoutesList = {
   Main: "/",
-  SelectedCard: "/card/:id",
   Card: "/card",
+  SelectedCard: "/card/:id",
   Exit: "/exit",
   Login: "/login",
   Register: "/register",
