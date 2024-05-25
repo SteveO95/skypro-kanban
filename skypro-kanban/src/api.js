@@ -46,18 +46,14 @@ export async function getTodos(token) {
     },
   });
 
-  // *
-  const resutl = Math.round(Math.random() * 10);
 
-  if (resutl < 7) {
-    throw new Error("Ошибка сервера!");
-  }
-  //
-
+  // * изменение обработки возможных ошибок
   if (response.ok) {
     const data = await response.json();
     return data;
+  } else if (response.status === 400) {
+    throw new Error("Ошибка запроса: Неверный запрос к серверу.");
+  } else {
+    throw new Error("Ошибка сервера: Не удалось получить данные.");
   }
-
-  throw new Error("Ошибка сервера!");
 }

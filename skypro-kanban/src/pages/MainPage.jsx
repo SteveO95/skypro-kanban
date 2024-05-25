@@ -25,7 +25,7 @@ const MainPage = ({ user }) => {
       },
     ]);
   };
-
+// изменение запросов
   const getCards = () => {
     getTodos(user.token)
       .then((data) => {
@@ -33,15 +33,23 @@ const MainPage = ({ user }) => {
         setDataLoading(false);
         setLoadingError(false);
       })
-      .catch(() => {
+      .catch((error) => {
         setLoadingError(true);
-        setTimeout(getCards, 1000);
+        console.error("Error fetching tasks:", error);
       });
-  };
+};
 
-  useEffect(() => {
-    getCards();
-  }, []);
+useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+        getCards();
+    }
+
+    return () => {
+        isMounted = false;
+    };
+}, []);
 
   let displayComponent;
   if (loadingError) {
