@@ -11,9 +11,11 @@ import {
 import { topicCompare } from "../../data";
 import { Link } from "react-router-dom";
 import { AppRoutesList } from "../../AppRoutesList";
+import { format, formatDistance, formatRelative, subDays } from "date-fns";
 
 const Card = ({ id, topic, title, date }) => {
   const color = topicCompare[topic];
+  let formatedDate = format(date, "dd.MM.yyy");
 
   return (
     <StyledCardItem data-id={id}>
@@ -57,7 +59,7 @@ const Card = ({ id, topic, title, date }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{date}</p>
+            <p>{formatedDate}</p>
           </StyledCardDate>
         </StyledCardContent>
       </StyledCard>

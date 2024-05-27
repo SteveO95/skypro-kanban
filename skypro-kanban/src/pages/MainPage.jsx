@@ -5,18 +5,19 @@ import { cardsList, topicList } from "../data";
 import { StyledWrapper } from "../Global.styled";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import { getTodos } from "../api";
 
-const MainPage = () => {
-  const [cards, setCards] = useState(cardsList);
-
+const MainPage = ({ user }) => {
+  const [cards, setCards] = useState(null);
+  const [loadingError, setLoadingError] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
 
   const addCard = () => {
-    let newId = cards.slice(-1)[0].id + 1;
+    let newId = cards.slice(-1)[0]._id + 1;
     setCards([
       ...cards,
       {
-        id: newId,
+        _id: newId,
         topic: topicList[Math.floor(Math.random() * topicList.length)],
         title: `Test title ${newId}`,
         date: new Date().toLocaleDateString("es-CL").split("-").reverse().join("-"),
@@ -24,19 +25,45 @@ const MainPage = () => {
       },
     ]);
   };
+// изменение запросов
+  const getCards = () => {
+    getTodos(user.token)
+      .then((data) => {
+        setCards(data.tasks);
+        setDataLoading(false);
+        setLoadingError(false);
+      })
+      .catch((error) => {
+        setLoadingError(true);
+        console.error("Error fetching tasks:", error);
+      });
+};
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDataLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+        getCards();
+    }
+
+    return () => {
+        isMounted = false;
+    };
+}, []);
+
+  let displayComponent;
+  if (loadingError) {
+    displayComponent = <Loader errorMessage={"Ошибка получения данных. Пробуем ещё раз..."} />;
+  } else if (dataLoading) {
+    displayComponent = <Loader />;
+  } else {
+    displayComponent = <Main cards={cards} />;
+  }
 
   return (
     <StyledWrapper>
-      <Header addCard={addCard} />
-      {dataLoading ? <Loader /> : <Main cards={cards} />}
-
+      <Header user={user} addCard={addCard} />
+      {displayComponent}
       <Outlet />
     </StyledWrapper>
   );

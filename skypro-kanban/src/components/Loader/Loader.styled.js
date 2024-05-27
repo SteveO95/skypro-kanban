@@ -35,3 +35,38 @@ export const StyledLoader = styled.div`
     }
   }
 `;
+
+export const StyledLoaderError = styled.div`
+  width: 100px;
+  height: 100px;
+  position: relative;
+  background: #2ec065;
+  border-radius: 50%;
+  border: 4px solid white;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+    width: 10%;
+    left: 45%;
+    top: 10%;
+    height: 80%;
+    background-color: white;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    animation: s2 1s infinite;
+  }
+
+  &:before {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    animation: s2 1s infinite;
+  }
+
+  @keyframes s2 {
+    100% {
+      transform: rotate(0.9turn);
+    }
+  }
+`;
