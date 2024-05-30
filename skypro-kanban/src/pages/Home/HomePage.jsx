@@ -44,14 +44,14 @@ export default function HomePage() {
           "Данные загружаются..."
         ) : (
           <MainContent>
-            {statusList.map((status) => (
-              <Column
-                title={status}
-                key={status}
-                cardList={cards.filter((card) => card.status === status)}
-              />
-            ))}
-          </MainContent>
+  {statusList.map((status) => (
+    <Column
+      title={status}
+      key={status}
+      cardList={cards && cards.filter((card) => card.status === status)}
+    />
+  ))}
+</MainContent>
         )}
       </WrapperStyled>
     </>
