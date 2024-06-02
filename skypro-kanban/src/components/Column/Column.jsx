@@ -1,27 +1,19 @@
-
 import Card from "../Card/Card";
-import { Cards, ColumnTitle, MainColumn } from "./Column.styled";
+import { StyledColumn, StyledColumnTitle, StyledCards } from "./Column.styled";
 
-
-export default function Column({ title, cardList }) {
-  
+const Column = ({ title, cards }) => {
   return (
-    <MainColumn>
-      <ColumnTitle>
+    <StyledColumn>
+      <StyledColumnTitle>
         <p>{title}</p>
-      </ColumnTitle>
-      <Cards>
-        {cardList.map((card) => (
-          <Card
-            theme={card.topic}
-            title={card.title}
-            date={card.date}
-            key={card._id}
-            status={card.status}
-            id={card._id}
-          />
+      </StyledColumnTitle>
+      <StyledCards>
+        {cards.map((card) => (
+          <Card key={card._id} id={card._id} topic={card.topic} title={card.title} date={card.date} />
         ))}
-      </Cards>
-    </MainColumn>
+      </StyledCards>
+    </StyledColumn>
   );
-}
+};
+
+export default Column;
