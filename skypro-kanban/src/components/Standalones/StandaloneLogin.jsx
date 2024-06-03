@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Button from "../Button/Button";
@@ -15,12 +14,15 @@ import {
 import { AppRoutesList } from "../../AppRoutesList";
 import { loginUser } from "../../api";
 import { useState } from "react";
+import { useUserContext } from "../../context/user";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Slide, Zoom, Flip, Bounce } from "react-toastify";
+import { Slide } from "react-toastify";
 
-const StandaloneLogin = ({ setUser }) => {
+const StandaloneLogin = () => {
+  const { updateUser } = useUserContext();
+
   const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
     login: "",
@@ -79,7 +81,7 @@ const StandaloneLogin = ({ setUser }) => {
       throwSuccess("Вход успешен!");
 
       setTimeout(() => {
-        setUser(response.user);
+        updateUser(response.user);
         navigate(AppRoutesList.Main);
       }, 500);
     } catch (error) {

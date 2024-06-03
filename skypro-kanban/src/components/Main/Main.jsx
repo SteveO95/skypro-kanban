@@ -2,8 +2,11 @@ import { statusList } from "../../data";
 import Column from "../Column/Column";
 import { StyledMain, StyledMainBlock, StyledMainContent } from "./Main.styled";
 import { StyledContainer } from "../Container/Container.styled";
+import { useCardsContext } from "../../context/cards";
 
-const Main = ({ cards }) => {
+const Main = () => {
+  const { cards } = useCardsContext();
+
   return (
     <StyledMain>
       <StyledContainer>

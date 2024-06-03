@@ -1,31 +1,19 @@
 import Main from "../components/Main/Main";
 import Loader from "../components/Loader/Loader";
 import Header from "../components/Header/Header";
-import { cardsList, topicList } from "../data";
 import { StyledWrapper } from "../Global.styled";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { getTodos } from "../api";
+import { useUserContext } from "../context/user";
+import { CardsContext } from "../context/cards";
 
-const MainPage = ({ user }) => {
+const MainPage = () => {
   const [cards, setCards] = useState(null);
   const [loadingError, setLoadingError] = useState(false);
   const [dataLoading, setDataLoading] = useState(true);
+  const { user } = useUserContext();
 
-  const addCard = () => {
-    let newId = cards.slice(-1)[0]._id + 1;
-    setCards([
-      ...cards,
-      {
-        _id: newId,
-        topic: topicList[Math.floor(Math.random() * topicList.length)],
-        title: `Test title ${newId}`,
-        date: new Date().toLocaleDateString("es-CL").split("-").reverse().join("-"),
-        status: "Без статуса",
-      },
-    ]);
-  };
-// изменение запросов
   const getCards = () => {
     getTodos(user.token)
       .then((data) => {
@@ -33,39 +21,37 @@ const MainPage = ({ user }) => {
         setDataLoading(false);
         setLoadingError(false);
       })
-      .catch((error) => {
-        setLoadingError(true);
-        console.error("Error fetching tasks:", error);
+      .catch(() => {
+        setTimeout(getCards, 1000);
       });
-};
+  };
 
-useEffect(() => {
-    let isMounted = true;
+  const updateCards = (newCards) => {
+    setCards(newCards);
+  };
 
-    if (isMounted) {
-        getCards();
-    }
-
-    return () => {
-        isMounted = false;
-    };
-}, []);
+  useEffect(() => {
+    getCards();
+  }, []);
 
   let displayComponent;
+
   if (loadingError) {
-    displayComponent = <Loader errorMessage={"Ошибка получения данных. Пробуем ещё раз..."} />;
+    displayComponent = <Loader errorMessage={"Ошибка получения данных. Пробуем ещё разок..."} />;
   } else if (dataLoading) {
     displayComponent = <Loader />;
   } else {
-    displayComponent = <Main cards={cards} />;
+    displayComponent = <Main />;
   }
 
   return (
-    <StyledWrapper>
-      <Header user={user} addCard={addCard} />
-      {displayComponent}
-      <Outlet />
-    </StyledWrapper>
+    <CardsContext.Provider value={{ cards, updateCards }}>
+      <StyledWrapper>
+        <Header user={user} />
+        {displayComponent}
+        <Outlet />
+      </StyledWrapper>
+    </CardsContext.Provider>
   );
 };
 

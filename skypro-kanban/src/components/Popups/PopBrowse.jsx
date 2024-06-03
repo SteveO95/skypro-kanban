@@ -1,16 +1,20 @@
+import { useCardsContext } from "../../context/cards";
 import Button from "../Button/Button";
 import Calendar from "../Calendar/Calendar";
 import { StyledPopUp } from "./PopUp.styled";
 import { Link } from "react-router-dom";
 
-const PopBrowse = ({ id, ...props }) => {
+const PopBrowse = ({ id }) => {
+  const { cards } = useCardsContext();
+  const selectedCard = cards.find((card) => card._id === id);
+
   return (
     <StyledPopUp className="pop-browse" id="popBrowse">
       <div className="pop-browse__container">
         <div className="pop-browse__block">
           <div className="pop-browse__content">
             <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">Название задачи {id}</h3>
+              <h3 className="pop-browse__ttl">{selectedCard.title}</h3>
               <div className="categories__theme theme-top _orange _active-category">
                 <p className="_orange">Web Design</p>
               </div>
@@ -47,10 +51,11 @@ const PopBrowse = ({ id, ...props }) => {
                     id="textArea01"
                     readOnly
                     placeholder="Введите описание задачи..."
+                    value={selectedCard.description}
                   ></textarea>
                 </div>
               </form>
-              <Calendar />
+              <Calendar date={selectedCard.date} />
             </div>
             <div className="theme-down__categories theme-down">
               <p className="categories__p subttl">Категория</p>

@@ -3,12 +3,15 @@ import Button from "../Button/Button";
 import { StyledPopUp, StyledPopUpExitFormGroup } from "./PopUp.styled";
 import { AppRoutesList } from "../../AppRoutesList";
 import { useNavigate } from "react-router-dom";
+import { useUserContext } from "../../context/user";
 
-const PopExit = ({ setUser }) => {
+const PopExit = () => {
+  const { updateUser } = useUserContext();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    setUser(null);
+    updateUser(null);
     navigate(AppRoutesList.Login);
   };
 
