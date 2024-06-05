@@ -1,43 +1,46 @@
-import {
-  StyledCardItem,
-  StyledCard,
-  StyledCardGroup,
-  StyledCardContent,
-  StyledCardButton,
-  StyledCardTheme,
-  StyledCardTitle,
-  StyledCardDate,
-} from "./Card.styled";
-import { topicCompare } from "../../data";
 import { Link } from "react-router-dom";
-import { AppRoutesList } from "../../AppRoutesList";
-import { format, formatDistance, formatRelative, subDays } from "date-fns";
+import {
+  CardBtn,
+  CardContent,
+  CardDate,
+  CardGroup,
+  CardTitle,
+  CardTopic,
+  Cards,
+  CardsItem,
+  TopicText,
+} from "./Card.styled";
+import { topicHeader } from "../../lib/topic";
 
-const Card = ({ id, topic, title, date }) => {
-  const color = topicCompare[topic];
-  let formatedDate = format(date, "dd.MM.yyy");
-
+function Card({ theme, title, date, id }) {
   return (
-    <StyledCardItem data-id={id}>
-      <StyledCard>
-        <StyledCardGroup>
-          <StyledCardTheme $color={color}>
-            <p>{topic}</p>
-          </StyledCardTheme>
-          <a href="#popBrowse" target="_self">
-            <StyledCardButton>
+    <CardsItem>
+      <Cards>
+        <CardGroup>
+          <CardTopic $topicColor={topicHeader[theme]}>
+            <TopicText>{theme}</TopicText>
+          </CardTopic>
+
+          <Link to={`/card/${id}`}>
+            <CardBtn>
               <div></div>
               <div></div>
               <div></div>
-            </StyledCardButton>
-          </a>
-        </StyledCardGroup>
-        <StyledCardContent>
-          <Link to={`${AppRoutesList.Card}/${id}`}>
-            <StyledCardTitle>{title}</StyledCardTitle>
+            </CardBtn>
           </Link>
-          <StyledCardDate>
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+        </CardGroup>
+        <CardContent>
+          <a href="" target="_blank">
+            <CardTitle>{title}</CardTitle>
+          </a>
+          <CardDate>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="13"
+              height="13"
+              viewBox="0 0 13 13"
+              fill="none"
+            >
               <g clipPath="url(#clip0_1_415)">
                 <path
                   d="M10.5625 2.03125H2.4375C1.7644 2.03125 1.21875 2.5769 1.21875 3.25V10.5625C1.21875 11.2356 1.7644 11.7812 2.4375 11.7812H10.5625C11.2356 11.7812 11.7812 11.2356 11.7812 10.5625V3.25C11.7812 2.5769 11.2356 2.03125 10.5625 2.03125Z"
@@ -59,12 +62,11 @@ const Card = ({ id, topic, title, date }) => {
                 </clipPath>
               </defs>
             </svg>
-            <p>{formatedDate}</p>
-          </StyledCardDate>
-        </StyledCardContent>
-      </StyledCard>
-    </StyledCardItem>
+            <p>{date}</p>
+          </CardDate>
+        </CardContent>
+      </Cards>
+    </CardsItem>
   );
-};
-
+}
 export default Card;

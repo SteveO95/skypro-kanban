@@ -1,7 +1,10 @@
-import StandaloneLogin from "../components/Standalones/StandaloneLogin";
+
+import Login from '../components/auth/Login'
 
 const LoginPage = () => {
-  return <StandaloneLogin />;
-};
+  return (
+   <Login />
+  )
+}
 
-export default LoginPage;
+export default LoginPage

@@ -1,19 +1,24 @@
-import Card from "../Card/Card";
-import { StyledColumn, StyledColumnTitle, StyledCards } from "./Column.styled";
+import Card from "../card/Card";
+import { ColumnTitle, MainColumn } from "./Column.styled";
 
-const Column = ({ title, cards }) => {
+
+function Column({ title, allCards }) {
+
   return (
-    <StyledColumn>
-      <StyledColumnTitle>
+    <MainColumn>
+      <ColumnTitle>
         <p>{title}</p>
-      </StyledColumnTitle>
-      <StyledCards>
-        {cards.map((card) => (
-          <Card key={card._id} id={card._id} topic={card.topic} title={card.title} date={card.date} />
-        ))}
-      </StyledCards>
-    </StyledColumn>
+      </ColumnTitle>
+      {allCards.map((card) => (
+        <Card
+          title={card.title}
+          theme={card.topic}
+          date={card.date}
+          id={card._id}
+          key={card._id}
+        />
+      ))}
+    </MainColumn>
   );
-};
-
+}
 export default Column;

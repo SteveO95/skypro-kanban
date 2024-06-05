@@ -1,97 +1,117 @@
 import { Link, useNavigate } from "react-router-dom";
-
-import Button from "../Button/Button";
-import Calendar from "../Calendar/Calendar";
-import * as Styled from "./PopUp.styled";
-import { AppRoutesList } from "../../AppRoutesList";
-import { useCardsContext } from "../../context/cards";
+import { routeObj } from "../../lib/const";
+import * as S from "../popups/PopNewCard.styled";
+import Calendar from "../calendar/Calendar";
 import { useState } from "react";
-import { addNewTodos } from "../../api";
-import { useUserContext } from "../../context/user";
-import { topicCompare, topicList } from "../../data";
+import { postToDo } from "../../api";
+import { useUserContext } from "../../contexts/hooks/useUser";
+import { topicWithColors } from "../../lib/topic";
+import { useTaskContext } from "../../contexts/hooks/useTask";
 
-const PopNewCard = () => {
+function PopNewCard() {
+  const [newTask, setNewTask] = useState({
+    title: "",
+    description: "",
+    topic: "",
+  });
+  const [error, setError] = useState(null);
+  const [selected, setSelected] = useState();
   const navigate = useNavigate();
-
   const { user } = useUserContext();
+  const { setCards } = useTaskContext();
 
-  const { updateCards } = useCardsContext();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTask({ ...newTask, [name]: value });
+  };
 
-  const [title, setTitle] = useState("");
-  const [topic, setTopic] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState(new Date().toISOString());
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const taskData = { ...newTask, date: selected };
 
-  const addCard = () => {
-    const token = user.token;
-    addNewTodos({ token, title, topic, description, date }).then((data) => {
-      updateCards(data.tasks);
-      navigate(AppRoutesList.Main);
-    });
+    postToDo({ ...taskData, token: user?.token })
+      .then((responseData) => {
+        setCards(responseData.tasks);
+
+        navigate(-1);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
 
   return (
-    <Styled.StyledPopUp>
-      <Styled.StyledPopUpContainer>
-        <Styled.StyledPopUpBlock>
-          <Styled.StyledPopUpContent>
-            <Styled.StyledPopUpTitle>Создание задачи</Styled.StyledPopUpTitle>
-            <Link to={AppRoutesList.Main}>
-              <Styled.StyledPopUpClose>&#10006;</Styled.StyledPopUpClose>
-            </Link>
-            <Styled.StyledPopUpWrap>
-              <Styled.StyledPopUpForm>
-                <Styled.StyledPopUpFormBlock>
-                  <Styled.StyledPopUpSubtitle>Название задачи</Styled.StyledPopUpSubtitle>
-                  <Styled.StyledPopUpFormInput
+    <S.PopNewCard>
+      <S.PopNewCardContainer>
+        <S.PopNewCardBlock>
+          <S.PopNewCardContent>
+            <S.PopNewCardTtl>Создание задачи</S.PopNewCardTtl>
+            <S.PopNewCardClose>
+              {" "}
+              <Link to={routeObj.MAIN}>&#10006;</Link>
+            </S.PopNewCardClose>
+            <S.PopNewCardWrap>
+              <S.PopNewCardForm action="#">
+                <S.FormNewBlock>
+                  <S.SubTtl htmlFor="formTitle">Название задачи</S.SubTtl>
+                  <S.FormNewInput
+                    onChange={handleInputChange}
+                    type="text"
+                    name="title"
                     placeholder="Введите название задачи..."
                     autoFocus
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
                   />
-                </Styled.StyledPopUpFormBlock>
-                <Styled.StyledPopUpFormBlock>
-                  <Styled.StyledPopUpSubtitle>Описание задачи</Styled.StyledPopUpSubtitle>
-                  <Styled.StyledPopUpFormTextarea
+                </S.FormNewBlock>
+                <S.FormNewBlock>
+                  <S.SubTtl htmlFor="textArea">Описание задачи</S.SubTtl>
+                  <S.FormNewArea
+                    onChange={handleInputChange}
+                    name="description"
                     placeholder="Введите описание задачи..."
-                    onChange={(e) => setDescription(e.target.value)}
-                    value={description}
-                  ></Styled.StyledPopUpFormTextarea>
-                </Styled.StyledPopUpFormBlock>
-              </Styled.StyledPopUpForm>
-              <Calendar date={date} setDate={setDate} />
-            </Styled.StyledPopUpWrap>
-            <Styled.StyledPopUpCategories>
-              <Styled.StyledPopUpCategoriesSubtitle>Категория</Styled.StyledPopUpCategoriesSubtitle>
-              <Styled.StyledPopUpCategoriesThemes>
-                {topicList.map((topicItem, index) => (
-                  <div key={index}>
-                    <Styled.StyledCategoriesThemeInput
-                      id={topicItem}
-                      value={topicItem}
-                      type="radio"
-                      checked={topic == topicItem}
-                      onChange={(event) => setTopic(event.target.value)}
-                    />
-                    <Styled.StyledCategoriesTheme htmlFor={topicItem} $colorName={`${topicCompare[topicItem]}`}>
-                      {topicItem}
-                    </Styled.StyledCategoriesTheme>
-                  </div>
-                ))}
-              </Styled.StyledPopUpCategoriesThemes>
-            </Styled.StyledPopUpCategories>
-            <Button
-              onClick={addCard}
-              text="Создать задачу"
-              id="btnCreate"
-              $width={"132px"}
-              className="form-new__create _hover01"
-            />
-          </Styled.StyledPopUpContent>
-        </Styled.StyledPopUpBlock>
-      </Styled.StyledPopUpContainer>
-    </Styled.StyledPopUp>
+                  ></S.FormNewArea>
+                </S.FormNewBlock>
+              </S.PopNewCardForm>
+
+              <Calendar selected={selected} setSelected={setSelected} />
+            </S.PopNewCardWrap>
+            <S.Categories>
+              <S.CategoriesP>Категория</S.CategoriesP>
+              <S.CategoriesThemes>
+                
+
+                {topicWithColors.map((item, index) => {
+                  return (
+                    <S.CategoriesTheme
+                    key = {index}
+                      htmlFor={index}
+                      $topicColor={[item.color]}
+                      style = {newTask.topic === item.topic ? {opacity: 1} : {}}
+                    >
+                      {item.topic}
+
+                      <input
+                        onChange={handleInputChange}
+                        type="radio"
+                       id={index}
+                        name="topic"
+                        value={item.topic}
+                      />
+                    </S.CategoriesTheme>
+                  );
+                })}
+
+               
+              </S.CategoriesThemes>
+            </S.Categories>
+            <S.FormNewCreate onClick={handleSubmit}>
+              Создать задачу
+            </S.FormNewCreate>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </S.PopNewCardContent>
+        </S.PopNewCardBlock>
+      </S.PopNewCardContainer>
+    </S.PopNewCard>
   );
-};
+}
 
 export default PopNewCard;

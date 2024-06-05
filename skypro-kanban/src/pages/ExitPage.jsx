@@ -1,7 +1,7 @@
-import PopExit from "../components/Popups/PopExit";
+import PopUser from "../components/popups/PopUser";
 
 const ExitPage = () => {
-  return <PopExit />;
+  return <PopUser />;
 };
 
 export default ExitPage;

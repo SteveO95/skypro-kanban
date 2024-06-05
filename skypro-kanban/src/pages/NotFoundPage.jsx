@@ -1,7 +1,11 @@
-import StandaloneNotFound from "../components/Standalones/StandaloneNotFound";
+import React from 'react'
 
 const NotFoundPage = () => {
-  return <StandaloneNotFound />;
-};
+  return (
+    <div>
+      <h2>404: Страница не найдена</h2>
+    </div>
+  )
+}
 
-export default NotFoundPage;
+export default NotFoundPage

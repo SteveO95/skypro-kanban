@@ -1,12 +1,18 @@
 import "./App.css";
-import AppRoutes from "./AppRoutes";
-import { GlobalStyle } from "./Global.styled";
+import { GlobalStyle } from "./components/Global.styled";
+import AppRoutes from "./Routes";
+
+
 
 function App() {
+ 
   return (
     <>
       <GlobalStyle />
       <AppRoutes />
+   
+      <script src="js/script.js"></script>
+      
     </>
   );
 }

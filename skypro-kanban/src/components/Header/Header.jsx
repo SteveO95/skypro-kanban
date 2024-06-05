@@ -1,67 +1,43 @@
 import { useState } from "react";
+import * as S from "./Header.styled";
+import { Container } from "../../styles/shared";
 import { Link } from "react-router-dom";
+import { routeObj } from "../../lib/const";
+import { useUserContext } from "../../contexts/hooks/useUser";
 
-import { AppRoutesList } from "../../AppRoutesList.js";
+function Header() {
+  const {user} = useUserContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const ToggleDropdown = () => setIsOpen((prevState) => !prevState);
 
-import {
-  StyledHeader,
-  StyledHeaderBlock,
-  StyledHeaderLogo,
-  StyledNav,
-  StyledAddTaskButton,
-  StyledHeaderUser,
-  StyledPopUpUser,
-  StyledPopUpUserName,
-  StyledPopUpUserMail,
-  StyledHeaderTheme,
-} from "./Header.styled.js";
-import { StyledContainer } from "../Container/Container.styled.js";
-import { StyledButton } from "../Button/Button.styled.js";
-
-const Header = ({ user }) => {
-  const [displayUserCard, setDisplayUserCard] = useState(false);
-
-  const toggleUserCard = () => {
-    setDisplayUserCard((previousState) => !previousState);
-  };
-
-  return (
-    <StyledHeader>
-      <StyledContainer>
-        <StyledHeaderBlock>
-          <StyledHeaderLogo>
-            <a>
-              <img src="/logo.png" alt="logo" />
-              {/* "/logo_dark.png" */}
-            </a>
-          </StyledHeaderLogo>
-          <StyledNav>
-            <Link to={`${AppRoutesList.Card}`}>
-              <StyledAddTaskButton text="Создать новую задачу" id="btnMainNew" $width={"178px"} />
-            </Link>
-            <StyledHeaderUser onClick={toggleUserCard}>{user.name}</StyledHeaderUser>
-            {displayUserCard ? (
-              <StyledPopUpUser id="user-set-target">
-                <StyledPopUpUserName>{user.name}</StyledPopUpUserName>
-                <StyledPopUpUserMail>{user.login}</StyledPopUpUserMail>
-                <StyledHeaderTheme>
-                  <p>Темная тема</p>
-                  <input type="checkbox" className="checkbox" name="checkbox" />
-                </StyledHeaderTheme>
-                <Link to={"/exit"}>
-                  <StyledButton $inverted $width={"72px"}>
-                    Выйти
-                  </StyledButton>
-                </Link>
-              </StyledPopUpUser>
-            ) : (
-              ""
-            )}
-          </StyledNav>
-        </StyledHeaderBlock>
-      </StyledContainer>
-    </StyledHeader>
+    return (
+    <S.Header>
+    <Container>
+      <S.HeaderBlock>
+        <S.HeaderLogo>
+             <Link to="/"><img src="images/logo.png" alt="logo" /> </Link>
+        </S.HeaderLogo>
+             <S.HeaderNav>
+          <S.Button>
+            <Link to={routeObj.NEWCARD}> <p>Создать новую задачу</p></Link>
+          </S.Button>
+          <S.HeaderUser onClick={ToggleDropdown} >
+            {user.name}
+          </S.HeaderUser>
+          {isOpen && (
+            <S.HeaderPop>
+              <S.PopUserSetName>{user.name}</S.PopUserSetName>
+              <S.PopUserSetMail>{user.login}</S.PopUserSetMail>
+              <S.ButtonExit>
+                <Link to={routeObj.EXIT}><p>Выйти</p></Link>
+              </S.ButtonExit>
+            </S.HeaderPop>
+          )}
+        </S.HeaderNav>
+      </S.HeaderBlock>
+    </Container>
+    </S.Header>
   );
-};
+}
 
 export default Header;

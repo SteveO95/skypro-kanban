@@ -1,24 +1,30 @@
-import Button from "../Button/Button";
-import { StyledPopUp } from "./PopUp.styled";
+import { Link } from "react-router-dom";
+import { ButtonPopExitNo, ButtonPopExitYes, PopExit, PopExitBlock, PopExitContainer, PopExitFormGroup, PopExitTtl } from "./PopUser.styled";
+import { routeObj } from "../../lib/const";
+import { useUserContext } from "../../contexts/hooks/useUser";
 
-const PopUser = () => {
+function PopUser() {
+  const {logout} = useUserContext();
   return (
-    <StyledPopUp className="pop-exit" id="popExit">
-      <div className="pop-exit__container">
-        <div className="pop-exit__block">
-          <div className="pop-exit__ttl">
+    <PopExit id="popExit">
+      <PopExitContainer>
+        <PopExitBlock>
+          <PopExitTtl>
             <h2>Выйти из аккаунта?</h2>
-          </div>
-          <form className="pop-exit__form" id="formExit" action="#">
-            <div className="pop-exit__form-group">
-              <Button link="modal/signin.html" text="Да, выйти" id="exitYes" className="pop-exit__exit-yes _hover01" />
-              <Button link="main.html" text="Нет, остаться" id="exitNo" className="pop-exit__exit-no _hover03" />
-            </div>
+          </PopExitTtl>
+          <form  id="formExit" action="#">
+            <PopExitFormGroup>
+              <ButtonPopExitYes onClick={logout} >
+              <Link to={routeObj.LOGIN}>Да, выйти</Link>
+              </ButtonPopExitYes>
+              <ButtonPopExitNo >
+              <Link to={routeObj.MAIN}>Нет, остаться </Link>
+              </ButtonPopExitNo >
+            </PopExitFormGroup>
           </form>
-        </div>
-      </div>
-    </StyledPopUp>
+        </PopExitBlock>
+      </PopExitContainer>
+    </PopExit>
   );
-};
-
+}
 export default PopUser;

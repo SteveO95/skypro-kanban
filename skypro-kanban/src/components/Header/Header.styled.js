@@ -1,14 +1,12 @@
 import styled from "styled-components";
-import Button from "../Button/Button";
-import { breakpoints } from "../../Global.styled";
-
-export const StyledHeader = styled.header`
+import { Hover01, Hover02, Hover03 } from "../../styles/shared";
+export const Header = styled.header`
   width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
 `;
 
-export const StyledHeaderBlock = styled.div`
+export const HeaderBlock = styled.div`
   height: 70px;
   display: flex;
   flex-wrap: nowrap;
@@ -19,45 +17,35 @@ export const StyledHeaderBlock = styled.div`
   left: 0;
   padding: 0 10px;
 `;
-
-export const StyledHeaderLogo = styled.div`
-  & a,
-  & a:visited {
-    text-decoration: none;
-    cursor: pointer;
-
-    & img {
-      width: 85px;
-    }
-  }
+export const HeaderLogo = styled.div`
+  width: 85px;
+ & img {width: 85px;}
 `;
-
-export const StyledNav = styled.nav`
+export const HeaderNav = styled.nav`
   max-width: 290px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
-
-export const StyledAddTaskButton = styled(Button)`
-  width: ${(props) => props.$width};
+export const Button = styled.button`
+  width: 178px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #565eef;
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 500;
   margin-right: 20px;
+  ${Hover01};
+  & p {
+  color: #FFFFFF;
+} 
 
-  @media (max-width: ${breakpoints.md}px) {
-    z-index: 3;
-    position: fixed;
-    left: 16px;
-    bottom: 30px;
-    top: auto;
-    width: calc(100vw - 32px);
-    height: 40px;
-    border-radius: 4px;
-    margin-right: 0;
-  }
 `;
-
-export const StyledHeaderUser = styled.a`
+export const HeaderUser = styled.a`
   height: 20px;
   display: flex;
   flex-wrap: nowrap;
@@ -66,6 +54,7 @@ export const StyledHeaderUser = styled.a`
   font-size: 14px;
   line-height: 20px;
   color: #565eef;
+  ${Hover02}
 
   &::after {
     content: "";
@@ -79,9 +68,13 @@ export const StyledHeaderUser = styled.a`
     margin: -6px 0 0 5px;
     padding: 0;
   }
+  &:hover::after {
+    border-left-color: #33399b;
+    border-bottom-color: #33399b;
+  }
 `;
 
-export const StyledPopUpUser = styled.div`
+export const HeaderPop = styled.div`
   position: absolute;
   top: 61px;
   right: 0;
@@ -96,7 +89,8 @@ export const StyledPopUpUser = styled.div`
   z-index: 2;
 `;
 
-export const StyledPopUpUserName = styled.p`
+
+export const PopUserSetName = styled.p`
   color: #000;
   font-size: 14px;
   font-weight: 500;
@@ -104,41 +98,37 @@ export const StyledPopUpUserName = styled.p`
   letter-spacing: -0.14px;
   margin-bottom: 4px;
 `;
-
-export const StyledPopUpUserMail = styled.p`
+export const PopUserSetMail = styled.p`
   color: #94a6be;
   font-size: 14px;
   line-height: 21px;
   letter-spacing: -0.14px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 `;
-
-export const StyledHeaderTheme = styled.div`
+export const PopUserSetTheme = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+`;
+export const PopUserSetThemeP = styled.p`
+  color: #000;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+`;
+export const PopUserSetThemeInput = styled.input`
+  position: relative;
+  width: 24px;
+  height: 13px;
+  border-radius: 100px;
+  background: #eaeef6;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
-  & p {
-    color: #000;
-    font-size: 14px;
-    line-height: 21px;
-    letter-spacing: -0.14px;
-  }
-
-  & input[type="checkbox"] {
-    position: relative;
-    width: 24px;
-    height: 13px;
-    border-radius: 100px;
-    background: #eaeef6;
-    outline: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-
-  & input[type="checkbox"]::before {
+  &::before {
     content: "";
     position: absolute;
     top: 1px;
@@ -149,8 +139,21 @@ export const StyledHeaderTheme = styled.div`
     background-color: #94a6be;
     transition: 0.5s;
   }
-
-  & input:checked[type="checkbox"]::before {
+  &:checked[type="checkbox"]::before {
     left: 12px;
+  }
+`;
+
+export const ButtonExit = styled.button`
+  width: 72px;
+  height: 30px;
+  background: transparent;
+  color: #565eef;
+  border-radius: 4px;
+  border: 1px solid #565eef;
+  ${Hover03}
+  
+  &:hover p {
+    color: #ffffff;
   }
 `;
