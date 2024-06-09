@@ -1,8 +1,8 @@
-import PopBrowse from "../components/Popups/PopBrowse";
-import PopNewCard from "../components/Popups/PopNewCard";
+import React from "react";
+import PopNewCard from "../components/popups/PopNewCard";
 
-const CardPage = () => {
-  return <PopNewCard />;
-};
+const NewCard = () => {
+    return <PopNewCard />
+}
+export default NewCard;
 
-export default CardPage;

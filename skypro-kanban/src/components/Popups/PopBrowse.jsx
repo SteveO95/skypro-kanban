@@ -1,94 +1,178 @@
-import { useCardsContext } from "../../context/cards";
-import Button from "../Button/Button";
-import Calendar from "../Calendar/Calendar";
-import { StyledPopUp } from "./PopUp.styled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Calendar from "../calendar/Calendar";
+import { routeObj } from "../../lib/const";
+import { useUserContext } from "../../contexts/hooks/useUser";
+import { useTaskContext } from "../../contexts/hooks/useTask";
+import { deleteTodo, editTodo } from "../../api";
+import { useState } from "react";
+import { status, topicHeader } from "../../lib/topic";
+import * as S from "../popups/PopBrowse.styled";
 
-const PopBrowse = ({ id }) => {
-  const { cards } = useCardsContext();
-  const selectedCard = cards.find((card) => card._id === id);
+function PopBrowse() {
+  const { id } = useParams();
+  const { user } = useUserContext();
+  const [isEdited, setIsEdited] =useState(false);
+  const { cards, setCards } = useTaskContext();
+  const card = cards.find((item) => item._id === id);
+  const [error, setError] = useState(null);
+  const [selected, setSelected] = useState();
+  const navigate = useNavigate();
+  
+  const [editTask, setEditTask] = useState({
+    title: card.title,
+    description: card.description,
+    topic: card.topic,
+    date: card.date,
+    status: card.status,
+  });
+  const [statusCard, setStatusCard] = useState(card.status);
+
+  const taskData = { ...editTask, date: selected };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditTask({ ...editTask, [name]: value });
+  };
+
+  function deleteTask(e) {
+    e.preventDefault();
+    deleteTodo({ token: user?.token, id })
+      .then((responseData) => {
+        setCards(responseData.tasks);
+        navigate(routeObj.MAIN);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  }
+
+  function editedTask() {
+    console.log("редактирование")
+    editTodo({token: user?.token, 
+      id, 
+      title: taskData.title,
+      status:statusCard,
+      date: selected,
+      description: taskData.description,
+      topic: taskData.topic,
+    }).then((responseData) => {
+      setCards(responseData.tasks);
+      navigate(routeObj.MAIN);
+    }).catch((err) => {
+      setError(err.message);
+    });
+  }
 
   return (
-    <StyledPopUp className="pop-browse" id="popBrowse">
-      <div className="pop-browse__container">
-        <div className="pop-browse__block">
-          <div className="pop-browse__content">
-            <div className="pop-browse__top-block">
-              <h3 className="pop-browse__ttl">{selectedCard.title}</h3>
-              <div className="categories__theme theme-top _orange _active-category">
-                <p className="_orange">Web Design</p>
-              </div>
-            </div>
-            <div className="pop-browse__status status">
-              <p className="status__p subttl">Статус</p>
-              <div className="status__themes">
-                <div className="status__theme _hide">
-                  <p>Без статуса</p>
-                </div>
-                <div className="status__theme _gray">
-                  <p className="_gray">Нужно сделать</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>В работе</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>Тестирование</p>
-                </div>
-                <div className="status__theme _hide">
-                  <p>Готово</p>
-                </div>
-              </div>
-            </div>
-            <div className="pop-browse__wrap">
-              <form className="pop-browse__form form-browse" id="formBrowseCard" action="#">
-                <div className="form-browse__block">
-                  <label htmlFor="textArea01" className="subttl">
-                    Описание задачи
+    <S.PopBrowse>
+      <S.PopBrowseContainer>
+        <S.PopBrowseBlock>
+          <S.PopBrowseContent>
+            <S.PopBrowseTopBlock>
+              <S.PopBrowseTtl>Задача № {id}</S.PopBrowseTtl>
+              <S.CategoriesTheme $topicColor={topicHeader[card.topic]}>
+                <p>{card.topic}</p>
+              </S.CategoriesTheme>
+            </S.PopBrowseTopBlock>
+            <S.Status>
+              <p>Статус</p>
+              <S.StatusThemes>
+                {status.map((item, index) => {
+                  return (
+                    <S.StatusTheme
+                     onClick={()=>{setStatusCard(item)}}
+                      key={index}
+                      htmlFor={index}
+                      style={
+                        editTask.status === item
+                          ? { backgroundColor: "#94a6be", color: "#ffffff" }
+                          : {}
+                      }
+                    >
+                      {item}
+                      <input
+                        onChange={handleInputChange}
+                        type="radio"
+                        id={index}
+                        name="status"
+                        value={item}
+                      />
+                    </S.StatusTheme>
+                  );
+                })}
+              </S.StatusThemes>
+            </S.Status>
+            <S.PopBrowseWrap>
+              <S.PopBrowseForm>
+                <S.FormBrowseBlock>
+                  <label htmlFor="textArea01">
+                    Описание задачи: {card.title}
                   </label>
-                  <textarea
-                    className="form-browse__area"
-                    name="text"
-                    id="textArea01"
-                    readOnly
-                    placeholder="Введите описание задачи..."
-                    value={selectedCard.description}
-                  ></textarea>
-                </div>
-              </form>
-              <Calendar date={selectedCard.date} />
-            </div>
-            <div className="theme-down__categories theme-down">
-              <p className="categories__p subttl">Категория</p>
-              <div className="categories__theme _orange _active-category">
-                <p className="_orange">Web Design</p>
-              </div>
-            </div>
-            <div className="pop-browse__btn-browse ">
-              <div className="btn-group">
-                <Button text="Редактировать задачу" className="btn-browse__edit _btn-bor _hover03" />
-                <Button text="Удалить задачу" className="btn-browse__delete _btn-bor _hover03" />
-              </div>
-              {/* <Button text="Закрыть" className="btn-browse__close _btn-bg _hover01" /> */}
-              <Link to="/">
-                <Button text={"Закрыть"}></Button>
-              </Link>
-            </div>
-            <div className="pop-browse__btn-edit _hide">
-              <div className="btn-group">
-                <Button text="Сохранить" className="btn-edit__edit _btn-bg _hover01" />
-                <Button text="Отменить" className="btn-edit__edit _btn-bor _hover03" />
-                <Button text="Удалить задачу" id="btnDelete" className="btn-edit__delete _btn-bor _hover03" />
-              </div>
-              {/* <Button text="Закрыть" className="btn-browse__close _btn-bg _hover01" /> */}
-              <Button>
-                <Link to="/">Закрыть</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </StyledPopUp>
-  );
-};
+                  {!isEdited && (
+                     <S.FormBrowseArea
+                     disabled={true}
+                     defaultValue={card.description}
+                     name="description"
+                     id="textArea01"
+                     readOnly=""
+                     placeholder="Введите описание задачи..."
+                   >
+                    
+                   </S.FormBrowseArea>
+                  )}
+                  {isEdited && (
+                      <S.FormBrowseArea
+                      onChange={handleInputChange}
+                      defaultValue={card.description}
+                      disabled={false}
+                      name="description"
+                      id="textArea01"
+                      placeholder="Введите описание задачи..."
+                    >
+                                          
+                    </S.FormBrowseArea>
+                  )}
+                  
+                </S.FormBrowseBlock>
+              </S.PopBrowseForm>
 
+              <Calendar selected={selected} setSelected={setSelected} />
+            </S.PopBrowseWrap>
+          {!isEdited && (
+          <S.PopBrowseBtnBrowse>
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              <S.BtnGroup>
+                <S.BtnBor onClick={() => {setIsEdited(!isEdited)}}>
+                  Редактировать задачу
+                  </S.BtnBor>
+                <S.BtnBor onClick={deleteTask}>Удалить задачу</S.BtnBor>
+              </S.BtnGroup>
+              <S.BtnBg>
+                <Link to={routeObj.MAIN}><p>Закрыть</p></Link>
+              </S.BtnBg>
+            </S.PopBrowseBtnBrowse>)}
+            
+            {isEdited && (
+            <S.PopBrowseBtnEdit>
+              <S.BtnGroup>
+                <S.BtnBg onClick={editedTask}>
+                  Сохранить
+                </S.BtnBg>
+                <S.BtnBor onClick={() => {setIsEdited(!isEdited)}}>
+                  Отменить
+                </S.BtnBor>
+                <S.BtnBor onClick={deleteTask}>
+                  Удалить задачу
+                </S.BtnBor>
+              </S.BtnGroup>
+              <S.BtnBg>
+                <Link to={routeObj.MAIN}><p>Закрыть</p></Link>
+              </S.BtnBg>
+            </S.PopBrowseBtnEdit>)}
+            
+          </S.PopBrowseContent>
+        </S.PopBrowseBlock>
+      </S.PopBrowseContainer>
+    </S.PopBrowse>
+  );
+}
 export default PopBrowse;

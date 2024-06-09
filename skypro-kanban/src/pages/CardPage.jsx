@@ -1,9 +1,11 @@
-import { useParams } from "react-router-dom";
-import PopBrowse from "../components/Popups/PopBrowse";
-
+import React from "react";
+import PopBrowse from "../components/popups/PopBrowse";
 const CardPage = () => {
-  let { id } = useParams();
-  return <PopBrowse id={id} />;
+  return (
+    
+      <PopBrowse />
+    
+  );
 };
 
 export default CardPage;
